@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ClassModel;
 
 class Student extends Model
 {
@@ -29,4 +30,9 @@ class Student extends Model
     {
         return $this->hasMany(ParentDetail::class, 'parent_id', 'id');
     }
+    public function class_detail()
+    {
+        return $this->hasOne(ClassModel::class, 'class_id', 'id');
+    }
+    
 }
