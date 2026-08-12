@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\ParentDetail;
 use App\Models\TeachersModel;
+use App\Mail\TeacherEmail;
+use Illuminate\Support\Facades\Mail;
 
 class TeachersControllers extends Controller
 {
@@ -28,6 +30,8 @@ class TeachersControllers extends Controller
         $data = $request->all();
 
         $teachers = TeachersModel::create($data);
+
+        Mail::to($teachers->email)->send(new \App\Mail\TeacherEmail($teachers->toArray()));
 
         // Return a response, typically JSON
         return response()->json([

@@ -28,11 +28,14 @@ class Student extends Model
 
     public function parent_detail()
     {
-        return $this->hasMany(ParentDetail::class, 'parent_id', 'id');
+        return $this->hasMany(ParentDetail::class, 'id', 'parent_id');
     }
     public function class_detail()
     {
-        return $this->hasOne(ClassModel::class, 'class_id', 'id');
+        return $this->belongsTo(ClassModel::class,'class_id', 'id');
     }
-    
+    public function teacher_detail()
+    {
+        return $this->hasOne(TeachersModel::class, 'id',  'teacher_id');
+    }
 }

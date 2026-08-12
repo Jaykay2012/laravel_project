@@ -14,6 +14,8 @@ class TeachersModel extends Model
         'name',
         'subject',
         'classes',
+        'email',
+        'phone_number',
         'created_at',
         'updated_at',
     ];

@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\ParentDetail;
+use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Mail;
 
 class StudentsController extends Controller
 {
     public function index()
     {
-        $students = Student::with('parent_details')->get();
+        // Pull up all students with their parent details
+        $students = Student::with('parent_detail', 'class_detail', 'teacher_detail')->get();
         return response()->json($students);
     }
     public function show($id)
@@ -28,6 +31,9 @@ class StudentsController extends Controller
         $data = $request->all();
 
         $students = Student::create($data);
+
+        // Send welcome email
+        Mail::to($students->email)->send(new \App\Mail\WelcomeEmail($students->toArray()));
 
         // Return a response, typically JSON
         return response()->json([
