@@ -36,6 +36,6 @@ class Student extends Model
     }
     public function teacher_detail()
     {
-        return $this->hasOne(TeachersModel::class, 'id',  'teacher_id');
+        return $this->hasOne(TeachersModel::class, 'id',  'id');
     }
 }

@@ -6,13 +6,14 @@ use App\Models\Student;
 use App\Models\ParentDetail;
 use App\Models\TeachersModel;
 use App\Mail\TeacherEmail;
+use App\Mail\TeacherUpdatedEmail;
 use Illuminate\Support\Facades\Mail;
 
 class TeachersControllers extends Controller
 {
     public function index()
     {
-        $teachers = TeachersModel::with('teachers')->get();
+        $teachers = TeachersModel::with('class_detail')->get();
         return response()->json($teachers);
     }
     public function show($id)
@@ -51,6 +52,9 @@ class TeachersControllers extends Controller
         $data = $request->all();
         $teachers->update($data);
 
+        Mail::to($teachers->email)->send(new \App\Mail\TeacherUpdatedEmail($teachers->toArray()));
+
+
         return response()->json([
             'message' => 'Teacher updated successfully',
             'teachers' => $teachers->id,
@@ -58,12 +62,15 @@ class TeachersControllers extends Controller
         ], 200); // HTTP status code 200: OK
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+
         $teachers = TeachersModel::find($id);
         if (!$teachers) {
             return response()->json(['message' => 'Teacher not found'], 404);
         }
+        Mail::to($teachers->email)->send(new \App\Mail\TeacherFiredEmail($teachers->toArray()));
+
 
         $teachers->delete();
 

@@ -11,7 +11,7 @@ class ClassController extends Controller
 {
     public function index()
     {
-        $classes = ClassModel::with('students')->get();
+        $classes = ClassModel::with('teacher_detail')->get();
         return response()->json($classes);
     }
 

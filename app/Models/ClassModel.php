@@ -17,4 +17,8 @@ class ClassModel extends Model
         'created_at',
         'updated_at',
     ];
+    public function teacher_detail()
+    {
+        return $this->hasOne(TeachersModel::class, 'id',  'form_teacher_id');
+    }
 }

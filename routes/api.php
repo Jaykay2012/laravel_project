@@ -55,3 +55,14 @@ Route::put('/classes/{id}', [ClassController::class, 'update']);
 
 Route::delete('/classes/{id}', [ClassController::class, 'destroy']);
 
+Route::get("/hi", function(){
+    return response()->json([
+        "full_name" => "Jason Malik",
+        "email" => "jaykaymsi6@gmail.com",
+        "message" => "Hi, from our API"
+    ]);
+});
+
+Route::get('/fetch-students', function(){
+    [StudentsController::class, 'index'];
+});

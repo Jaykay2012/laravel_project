@@ -29,8 +29,19 @@ class StudentsController extends Controller
     {
         // Directly get the data from the request
         $data = $request->all();
+        $validatedData = $request->validate([
+            "id" => "required|integer",
+            'first_name' => 'required|string|max:255',
+            'email'      => 'required|email|unique:students,email',
+            'age'        => 'required|integer|min:1',
+            'last_name' => 'required|string|max:255',
+            'phone_number' => "required|string|min:4",
+            'gender' => "required|string",
+            'address' => "required|string|min:5",
+        ]);
 
-        $students = Student::create($data);
+
+        $students = Student::create($validatedData);
 
         // Send welcome email
         Mail::to($students->email)->send(new \App\Mail\WelcomeEmail($students->toArray()));
@@ -54,6 +65,9 @@ class StudentsController extends Controller
         $data = $request->all();
         $students->update($data);
 
+        Mail::to($students->email)->send(new \App\Mail\StudentUpdatedMail($students->toArray()));
+
+
         return response()->json([
             'message' => 'Student updated successfully',
             'students' => $students->id,
@@ -69,7 +83,7 @@ class StudentsController extends Controller
         if (!$students) {
             return response()->json(['message' => 'Student not found'], 404);
         }
-
+        Mail::to($students->email)->send(new \App\Mail\StudentExpelledMail($students->toArray()));
         $students->delete();
         return response()->json(['message' => 'Student deleted successfully']);
     }
